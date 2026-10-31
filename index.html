@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Charm City Lead Response</title>
+<style>
+  :root{--ink:#14213d;--muted:#5b6478;--accent:#0b5fff;--bg:#f7f8fb;--card:#fff;--line:#e3e6ee}
+  *{box-sizing:border-box}
+  body{margin:0;font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--ink);background:var(--bg)}
+  header{padding:28px 20px;border-bottom:1px solid var(--line);background:var(--card)}
+  .wrap{max-width:860px;margin:0 auto;padding:0 20px}
+  h1{margin:0;font-size:22px}
+  h1 small{display:block;font-weight:400;color:var(--muted);font-size:14px;margin-top:4px}
+  main{padding:40px 20px}
+  .hero h2{font-size:30px;margin:0 0 10px}
+  .hero p{color:var(--muted);max-width:620px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:28px;margin-top:28px}
+  label{display:block;font-weight:600;margin:14px 0 6px}
+  input,textarea{width:100%;padding:11px 12px;border:1px solid #c9cfdb;border-radius:8px;font:inherit}
+  textarea{min-height:90px}
+  .consent{display:flex;gap:10px;align-items:flex-start;margin-top:16px;font-size:14px;color:var(--muted)}
+  .consent input{width:auto;margin-top:4px}
+  button{margin-top:18px;background:var(--accent);color:#fff;border:0;border-radius:8px;padding:12px 20px;font:inherit;font-weight:600;cursor:pointer}
+  .note{font-size:13px;color:var(--muted);margin-top:12px}
+  footer{padding:28px 20px;color:var(--muted);font-size:14px;border-top:1px solid var(--line)}
+  footer a{color:var(--accent);text-decoration:none;margin-right:16px}
+  .ok{display:none;background:#e9f7ef;border:1px solid #b7e2c6;color:#1e6b3a;padding:14px;border-radius:8px;margin-top:16px}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <h1>Charm City Lead Response <small>Instant lead reply for Baltimore service businesses</small></h1>
+</div></header>
+
+<main><div class="wrap">
+  <section class="hero">
+    <h2>Every lead answered in under a minute.</h2>
+    <p>When a customer fills in your website form or you miss their call, they get a text and an email within sixty seconds, you get an alert, and the lead is logged. Set up in a day. You own it.</p>
+  </section>
+
+  <section class="card">
+    <h3 style="margin-top:0">Request a callback</h3>
+    <form id="lead-form" action="https://lead-automation11.app.n8n.cloud/webhook/new-lead" method="post">
+      <label for="name">Name</label>
+      <input id="name" name="name" required autocomplete="name">
+      <label for="phone">Mobile number</label>
+      <input id="phone" name="phone" type="tel" required autocomplete="tel" placeholder="+1 410 555 0123">
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" autocomplete="email">
+      <label for="service">What do you need help with?</label>
+      <textarea id="service" name="service" required></textarea>
+      <input type="hidden" name="source" value="website">
+
+      <label class="consent">
+        <input type="checkbox" name="sms_consent" required>
+        <span>By checking this box and submitting, I agree to receive a text message and email from <strong>Charm City Lead Response</strong> confirming my request and arranging a callback. Message frequency varies by request; typically 1–3 messages. Message and data rates may apply. Reply STOP to cancel, HELP for help. Consent is not a condition of purchase. See our <a href="privacy.html">Privacy Policy</a> and <a href="terms.html">Terms &amp; Conditions</a>.</span>
+      </label>
+
+      <button type="submit">Send request</button>
+      <div class="ok" id="ok">Thanks — check your phone and email. We'll be in touch shortly.</div>
+      <p class="note">We never sell or share your number. One confirmation, then a human calls you.</p>
+    </form>
+  </section>
+</div></main>
+
+<footer><div class="wrap">
+  <a href="privacy.html">Privacy Policy</a>
+  <a href="terms.html">Terms &amp; Conditions</a>
+  <span>© 2026 Charm City Lead Response · Baltimore, MD</span>
+</div></footer>
+
+<script>
+document.getElementById('lead-form').addEventListener('submit', async function(e){
+  e.preventDefault();
+  const f = e.target;
+  const body = {name:f.name.value, phone:f.phone.value, email:f.email.value, service:f.service.value, source:'website'};
+  try{
+    await fetch(f.action,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  }catch(err){}
+  f.querySelector('button').disabled = true;
+  document.getElementById('ok').style.display='block';
+});
+</script>
+</body>
+</html>
